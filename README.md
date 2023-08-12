@@ -3,6 +3,7 @@
 
 An interactive 3D animation of a brain inspired by the [Blueyard Capital](https://www.blueyard.com/) website.
 
+Work in progress.
 ![Add a screenshot, Ryan](https://storage.googleapis.com/rz_github_images/brain.png)
 
 ## Technologies
