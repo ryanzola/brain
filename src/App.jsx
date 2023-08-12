@@ -39,13 +39,13 @@ PATHS.forEach(path => {
 })
 
 export default function App() {
-  return <Canvas camera={{ position: [0, 0, 0.3], near: 0.01, far: 100 }}>
+  return <Canvas camera={{ position: [-0.03, -0.02, 0.25], near: 0.01, far: 100 }}>
     <color attach="background" args={['black']} />
     <OrbitControls />
     <ambientLight />
     <pointLight position={[10, 10, 10]} />
 
     <Tubes allTheCurves={brainCurves} />
-    <Particles allTheCurves={curves} />
+    <Particles allTheCurves={brainCurves} />
   </Canvas>
 }
