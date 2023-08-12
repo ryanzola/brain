@@ -1,41 +1,51 @@
+
+import { CatmullRomCurve3, Vector3 } from 'three'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
-import * as THREE from 'three'
+
+import Tubes from './BrainTubes'
+import Particles from './BrainParticles'
+
 import { data } from './data'
 
 const PATHS = data.economics[0].paths
 
-console.log(PATHS)
-
-function Tube() {
+const randomRange = (min, max) => Math.random() * (max - min) + min
+let curves = []
+for(let i = 0; i < 100; i++) {
   let points = []
-  for (let i = 0; i < 10; i++) {
-    points.push(new THREE.Vector3(
-      (i - 5) * 2,
-      Math.sin(i * 2) * 10 + 5,
-      0
+  let length = randomRange(0.5, 1)
+  for(let j = 0; j < 100; j++) {
+    points.push(new Vector3().setFromSphericalCoords(
+      1, 
+      Math.PI - (j / 100) * Math.PI * length,
+      (i / 100) * Math.PI * 2, 
     ))
   }
-  let curve = new THREE.CatmullRomCurve3(points)
-  return <>
-    <mesh>
-      <tubeGeometry args={[curve, 64, 0.1, 8, false]} />
-      <meshPhongMaterial color="hotpink" side={THREE.DoubleSide} />
-    </mesh>
-  </>
+
+  let tempCurve = new CatmullRomCurve3(points)
+  curves.push(tempCurve)
 }
 
-export default function App() {
+let brainCurves = []
+PATHS.forEach(path => {
+  let points = []
+  for(let i = 0; i < path.length; i+=3) {
+    points.push(new Vector3(path[i], path[i+1], path[i+2]))
+  }
 
-  return <Canvas>
+  let tempCurve = new CatmullRomCurve3(points)
+  brainCurves.push(tempCurve)
+})
+
+export default function App() {
+  return <Canvas camera={{ position: [0, 0, 0.3], near: 0.01, far: 100 }}>
+    <color attach="background" args={['black']} />
     <OrbitControls />
     <ambientLight />
     <pointLight position={[10, 10, 10]} />
-    <mesh>
-      <boxGeometry />
-      <meshPhongMaterial color="hotpink" />
-    </mesh>
 
-    <Tube />
+    <Tubes allTheCurves={brainCurves} />
+    <Particles allTheCurves={curves} />
   </Canvas>
 }
